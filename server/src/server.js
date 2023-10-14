@@ -12,6 +12,7 @@ const { Server } = require("socket.io");
 const engine = require('./engine/engine')
 const io = new Server(server);
 
+const PUBLIC_PATH = join(__dirname, '../public/app/')
 const FILE_DIR = join(__dirname, '../data/screenshots')
 
 mkdirSync(FILE_DIR, { recursive: true })
@@ -30,8 +31,10 @@ setInterval(async () => {
   engine.predictFromImg(img)
 }, 1000)
 
+app.use(express.static(PUBLIC_PATH))
+
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(join(PUBLIC_PATH, '/index.html'));
 });
 
 app.post('/api/game/start', (req, res) => {
