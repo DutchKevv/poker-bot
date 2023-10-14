@@ -13,7 +13,7 @@ var MachinePoker = require('machine-poker')
 module.exports.create = function () {
   console.log('2323233')
   var table = MachinePoker.create({
-    maxRounds: 100
+    maxRounds: 1000
   });
 
   var players = [

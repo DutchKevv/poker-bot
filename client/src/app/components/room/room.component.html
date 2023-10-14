@@ -11,19 +11,19 @@
       </button>
     </div>
 
-    <hr>
+    <hr />
     <div>
       <label for="customRange1" class="form-label"
-      >Speed ({{ eventSpeed }}ms)</label
-    >
-    <input
-      type="range"
-      class="form-range"
-      id="customRange1"
-      (change)="onChangeSpeed($event)"
-    />
+        >Speed ({{ eventSpeed }}ms)</label
+      >
+      <input
+        type="range"
+        class="form-range"
+        id="customRange1"
+        (change)="onChangeSpeed($event)"
+      />
     </div>
-<hr>
+    <hr />
     <div>
       <div class="form-check">
         <input
@@ -33,56 +33,70 @@
           id="flexCheckDefault"
           (change)="togglePauseWin($any($event.target).checked)"
         />
-        <label class="form-check-label" for="flexCheckDefault" > Pause on win</label>
+        <label class="form-check-label" for="flexCheckDefault">
+          Pause on win</label
+        >
       </div>
     </div>
-
   </div>
 </div>
 
 <div class="poker-table-wrapper">
   <div class="poker-table-content">
     <div class="poker-table">
-
       <div class="cards">
         <app-card *ngFor="let card of cards" [card]="card"></app-card>
       </div>
 
       <div class="details" *ngIf="chips">
-        <img  class="stack-image" src="assets/images/poker_stack.png" alt="poker-chips" />
-        <p class="pot-chips">${{ chips }} <sup *ngIf="currentState" style="color: gray; font-style: italic;">({{ currentState }})</sup></p>
+        <img
+          class="stack-image"
+          src="assets/images/poker_stack.png"
+          alt="poker-chips"
+        />
+        <p class="pot-chips">
+          ${{ chips }}
+          <sup *ngIf="currentState" style="color: gray; font-style: italic"
+            >({{ currentState }})</sup
+          >
+        </p>
       </div>
     </div>
 
     <div
       *ngFor="let player of getSorted(players); let i = index"
-      [ngClass]="{ winning: player.winning, active: player.state === 'active' }"
-      id="player-{{ player.name }}"
+      [ngClass]="{
+        winning: player?.winning,
+        active: player?.state === 'active'
+      }"
+      id="player-{{ player?.name }}"
       class="player player-{{ i + 1 }}"
     >
-      <div class="fireworks"></div>
-      <!-- <img *ngIf="player.wagered" class="stack-image" src="assets/images/poker_stack.png" alt="poker-chips" /> -->
+      <ng-container *ngIf="player">
+        <div class="fireworks"></div>
+        <!-- <img *ngIf="player.wagered" class="stack-image" src="assets/images/poker_stack.png" alt="poker-chips" /> -->
 
-      <div class="player-cards">
-        <app-card *ngFor="let card of player.cards" [card]="card"></app-card>
-      </div>
+        <div class="player-cards">
+          <app-card *ngFor="let card of player.cards" [card]="card"></app-card>
+        </div>
 
-      <!-- <div class="player-avatar"></div> -->
-      <div class="player-details">
-        <p class="player-name">{{ player.name }}</p>
-        <p class="player-chips">${{ player.chips }}</p>
-      </div>
+        <!-- <div class="player-avatar"></div> -->
+        <div class="player-details">
+          <p class="player-name">{{ player.name }}</p>
+          <p class="player-chips">${{ player.chips }}</p>
+        </div>
 
-      <div class="player-blind" *ngIf="player.blind > 0">
-        {{ player.blind }}
-      </div>
-      <div
-        class="player-action"
-        *ngIf="player.action"
-        class="player-action--{{ player.action }}"
-      >
-        {{ player.action }}
-      </div>
+        <div class="player-blind" *ngIf="player.blind > 0">
+          {{ player.blind }}
+        </div>
+        <div
+          class="player-action"
+          *ngIf="player.action"
+          class="player-action--{{ player.action }}"
+        >
+          {{ player.action }}
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
@@ -92,6 +106,10 @@
 
   <div class="logs-content">
     <p class="log-line" *ngFor="let log of logs">
-      <b style="min-width: 80px; display: inline-block;">{{log.player?.name}}</b>:&nbsp;<i>{{ log.text }}</i></p>
+      <b style="min-width: 80px; display: inline-block">{{
+        log.player?.name
+      }}</b
+      >:&nbsp;<i>{{ log.text }}</i>
+    </p>
   </div>
 </div>

@@ -87,7 +87,6 @@ export class RoomComponent {
 
   startGame() {
     this.httpClient.post('api/game/start', {}).subscribe((data: any) => {
-      console.log(data);
       this.start()
     });
   }
@@ -157,12 +156,14 @@ export class RoomComponent {
         if (!this.players.length) {
           this.players = data.data.players;
         } else {
-          this.players[0] = data.data.players.find(player => player.name === this.players[0].name)
-          this.players[1] = data.data.players.find(player => player.name === this.players[1].name)
-          this.players[2] = data.data.players.find(player => player.name === this.players[2].name)
-          this.players[3] = data.data.players.find(player => player.name === this.players[3].name)
-          this.players[4] = data.data.players.find(player => player.name === this.players[4].name)
-          this.players[5] = data.data.players.find(player => player.name === this.players[5].name)
+          this.players[0] = data.data.players.find(player => player.name === this.players[0]?.name)
+          this.players[1] = data.data.players.find(player => player.name === this.players[1]?.name)
+          this.players[2] = data.data.players.find(player => player.name === this.players[2]?.name)
+          this.players[3] = data.data.players.find(player => player.name === this.players[3]?.name)
+          this.players[4] = data.data.players.find(player => player.name === this.players[4]?.name)
+          this.players[5] = data.data.players.find(player => player.name === this.players[5]?.name)
+
+          this.players = this.players.filter(Boolean)
         }
 
         // this.players = data.data.players.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
@@ -190,7 +191,6 @@ export class RoomComponent {
 
         if (player.action === 'raise' || player.action === 'call') {
           this.chips += action.bet;
-          console.log(2222, action)
           if (player.action === 'raise') {
             player.action += ' (' + action.bet + ')';
           }
@@ -230,7 +230,8 @@ export class RoomComponent {
 
         break;
       case 'tournamentComplete':
-        alert(2)
+        console.info('tournamentComplete')
+        break;
     }
     ;
   }
