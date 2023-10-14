@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch src ./src/server.js"
+    "start": "nodemon --watch src ./src/server.js",
+    "prod": "forever start ./src/server.js"
   },
   "author": "",
   "license": "ISC",
