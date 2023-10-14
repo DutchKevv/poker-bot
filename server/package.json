@@ -4,11 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/server.js"
+    "start": "nodemon --watch src ./src/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "screenshot-desktop": "^1.15.0"
+    "@sashido/teachablemachine-node": "^1.2.2",
+    "@teachablemachine/image": "^0.8.5",
+    "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow/tfjs-backend-cpu": "^4.11.0",
+    "@tensorflow/tfjs-node": "^4.11.0",
+    "@tensorflow/tfjs-node-gpu": "^4.11.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "machine-poker": "^0.5.1",
+    "nodemon": "^3.0.1",
+    "screenshot-desktop": "^1.15.0",
+    "socket.io": "^4.7.2",
+    "stompjs": "^2.3.3"
   }
 }

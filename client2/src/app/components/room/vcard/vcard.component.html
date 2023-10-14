@@ -1,0 +1,20 @@
+<div class="vCard" [class.active]="timeRest">
+    <div class="timeA">
+      <div class="internalRadius" [style.transform]="'rotate(' + partGradesA + 'deg)'"></div>
+    </div>
+    <div class="head" [class.available]="!image">
+      <span *ngIf="void">Seat</span>
+      <img [src]="image" *ngIf="image && image !== '#'" />
+      <img src="assets/unknown.gif" *ngIf="image && image === '#'" />
+      <div class="name" *ngIf="name">{{name}}</div>
+      <div class="chips" *ngIf="chips">
+        <div class="boxy">{{chips}}</div>
+      </div>
+      <div class="chips" *ngIf="chips == '0' && inGame">
+        <div class="boxyAllIn">All In</div>
+      </div>
+    </div>
+    <div class="timeB">
+        <div class="internalRadius" [style.transform]="'rotate(' + partGradesB + 'deg)'"></div>
+    </div>
+  </div>

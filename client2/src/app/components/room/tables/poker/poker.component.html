@@ -1,0 +1,63 @@
+<!-- </!-->
+
+<div class="borderOut">
+  <div class="restFrame" [class.winSelection]="resultMode">
+
+    <div class="iterator" *ngFor="let player of players; let idx = index">
+      <app-chips class="{{zones[idx]}}" valor="D" [fixedSize]="true" *ngIf="dealerPosition == idx"></app-chips>
+      <app-room-vcard class="{{zones[idx]}}"
+        [image]="player.playerDetails.image"
+        [name]="player.playerDetails.name"
+        [chips]="player.playerDetails.chips.toString()"
+        [timeRest]="player.timeRest"
+        [void]="availablePositions[idx]"
+        [inGame]="player.inGame"
+        (click)="trySeat(idx, $event, player.playerDetails.userID)"
+      ></app-room-vcard>
+      <div class="zone {{zones[idx]}} value" *ngIf="player.actualBet > 0">
+        {{player.actualBet}}
+      </div>
+      <div class="zone {{zones[idx]}}" *ngIf="player.actualBet > 0">
+        <app-stacker [valor]="player.actualBet"></app-stacker>
+      </div>
+      <div class="cardStack {{zones[idx]}}" *ngIf="player.cards?.length > 0" [class.winner]="player.winner">
+        <app-dual-stack [upsidedown]="player.upsidedown" [cards]="player.cards"></app-dual-stack>
+      </div>
+    </div>
+
+    <div class="borderIn">
+      <div class="wood">
+        <div class="cloth">
+          <div class="dottedLine">
+            <div class="bigLine">
+              <div class="waterMark">
+                WebPoker
+              </div>
+              <div class="warning" *ngIf="info">
+                {{info}}
+              </div>
+              <div class="cardsZone">
+                <div class="cards">
+                  <app-card *ngFor="let card of tableCards" [upsidedown]="card === null" [palo]="card ? card.suit : 0" [valor]="card ? card.value : 0"></app-card>
+                </div>
+                <label class="pot" *ngIf="pot > 0  && !splittedPots">Pot: {{pot}}</label>
+                <label class="pot" *ngIf="splittedPots">
+                  <span *ngFor="let subPot of splittedPots">
+                    Pot: {{subPot}}
+                  </span>
+                </label>
+                <div class="potChips" *ngIf="pot > 0">
+                  <app-stacker [valor]="+pot"></app-stacker>
+                </div>
+                <div class="deck" *ngIf="dealed">
+                  <app-deck></app-deck>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-user-menu-actions></app-user-menu-actions>

@@ -1,0 +1,19 @@
+<div class="actionBox" *ngIf="isMyTurn">
+  <div class="floatingButtons">
+    <button class="miniRed" (click)="multiply(2)">x2</button>
+    <button class="miniRed" (click)="multiply(3)">x3</button>
+    <button class="miniRed" (click)="multiply(4)">x4</button>
+    <button class="miniRed" (click)="multiply(5)">x5</button>
+    <button class="miniRed" (click)="allIn()">All In</button>
+  </div>
+  <div class="barBox">
+    <app-bet-selector #betSelector *ngIf="actualRaise >= 0" [toCall]="toCall" [actualBet]="actualBet" [userChips]="myChips" [initialRaise]="actualRaise" [maxRaise]="maxRaise" (raiseChanged)="actualRaise = $event"></app-bet-selector>
+  </div>
+  <div class="buttonBox">
+    <button class="blue" (click)="raise(actualRaise)" *ngIf="canCheck || toCall < myChips">Rise {{actualRaise}} <span style="font-size: 9px;">({{actualRaise + toCall}})</span></button>
+    <button (click)="call(toCall)" *ngIf="!canCheck && toCall < myChips">Call {{toCall}}</button>
+    <button (click)="call(toCall)" *ngIf="!canCheck && toCall >= myChips">All-In</button>
+    <button class="info" (click)="check()" *ngIf="canCheck">Check</button>
+    <button class="warning" (click)="fold()">Fold</button>
+  </div>
+</div>

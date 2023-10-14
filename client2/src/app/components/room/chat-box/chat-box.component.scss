@@ -1,0 +1,109 @@
+.chatBox{
+  width: 350px;
+  height: 30px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  transition: height 1s;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px 4px #00000073;
+  border: 1px solid #000000;
+  border-radius: 7px;
+  background: #0b1b0f;
+  color: #d7a965;
+  z-index: 1;
+  input {
+    bottom: -30px;
+    position: absolute;
+    width: calc(100% - 33px);
+    padding: 5px;
+    transition: bottom 1s;
+    background: #010803;
+    border: none;
+    color: #d7a965;
+    outline: none;
+  }
+  button.sendMessage{
+    position: absolute;
+    bottom: -30px;
+    right: 0px;
+    color: #d7a965;
+    width: 25px;
+    background: #0b1b0f;
+    height: 24px;
+    padding: 5px 6px;
+    border: none;
+    cursor: pointer;
+    transition: bottom 1s;
+    outline: none;
+  }
+  &.open {
+    height: 250px;
+    input {
+      bottom: 0px;
+    }
+    button.sendMessage{
+      bottom: 0px;
+    }
+  }
+  .bar {
+    text-align: left;
+    padding-top: 6px;
+    padding-right: 10px;
+    padding-left: 1vh;
+    line-height: 22px;
+    svg {
+      color: rgba(255, 255, 255, 0.60);
+      cursor: pointer;
+      width: 17px;
+      float: right;
+    }
+  }
+  ul.body{
+    color: #a0b2b3;
+    margin: 0px;
+    list-style: none;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: auto;
+    width: calc(100% - 28px);
+    height: calc(100% - 75px);
+    margin-top: 7px;
+    font-family: cursive;
+    font-size: 12px;
+    li {
+      margin: 2px 0px;
+      background: #19271c;
+      padding: 2px;
+      border-radius: 3px;
+      span {
+        color: #49ab61;
+      }
+      &.system {
+        background: rgba(255, 255, 255, 0.25);
+        text-align: center;
+        color: rgb(222, 168, 87);
+      }
+    }
+    &::-webkit-scrollbar {
+      width: 8px;     /* Tamaño del scroll en vertical */
+      height: 8px;    /* Tamaño del scroll en horizontal */
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #3e6139;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #b3b3b3;
+      box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+    }
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #999999;
+    }
+    &::-webkit-scrollbar-track {
+      background: rgba(215, 169, 101, 0.05);
+      border-radius: 4px;
+    }
+  }
+}

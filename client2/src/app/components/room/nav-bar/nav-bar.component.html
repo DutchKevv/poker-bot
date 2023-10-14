@@ -1,0 +1,12 @@
+<nav>
+    <header><h3>WEB</h3><h4>POKER</h4><span>Version: {{version}}</span></header>
+    <button (click)="leave()">Leave</button>
+    <label>
+        {{serverName}}
+    </label>
+    <label class="secondary">
+        {{description}}
+    </label>
+    <button (click)="action.emit('deposit')">Deposit Chips</button>
+    <button (click)="action.emit('history')">Previous Hand</button>
+</nav>

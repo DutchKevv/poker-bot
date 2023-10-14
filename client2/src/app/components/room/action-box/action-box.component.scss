@@ -1,0 +1,104 @@
+.actionBox {
+  width: 500px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  z-index: 2;
+  // opacity: 0.3;
+  // &.active {
+  //   opacity: 1;
+  // }
+  .barBox {
+    background: #0d2011;
+    border: 1px dashed rgba(255, 180, 45, 0.5);
+    width: 299px;
+    padding: 2px;
+    border-radius: 5px 0px 0px 0px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.65);
+    display: inline-block;
+    border-right: 0px;
+    border-bottom: 0px;
+  }
+  .buttonBox {
+    display: inline-block;
+    width: 196px;
+    vertical-align: bottom;
+    height: 170px;
+    border-radius: 20px 0px 0px 0px;
+    padding-top: 5px;
+    box-shadow: 0px 0px 10px 4px #00000073;
+    background: #0b1b0f;
+    color: #d7a965;
+    button {
+      display: block;
+      width: 90%;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 20px;
+      text-shadow: 1px 1px rgba(0, 0, 0, 0.35);
+      background: linear-gradient(#1e3221, #102013);
+      border: 1px solid #29452d;
+      border-radius: 3px;
+      padding: 6px 15px;
+      color: #d7a965;
+      border-right: 1px solid #223c26;
+      border-left: 1px solid #223c26;
+      box-shadow: 0px 0px 6px 2px black;
+      font-family: Montserrat;
+      outline: none;
+      cursor: pointer;
+      margin: 5px auto;
+      &.blue {
+        background: linear-gradient(#1e2932, #101920);
+        border: 1px solid #293845;
+        border-right: 1px solid #22313c;
+        border-left: 1px solid #22343c;
+      }
+      &.info {
+        background: linear-gradient(#32311e, #202010);
+        border: 1px solid #454429;
+        border-right: 1px solid #3a3c22;
+        border-left: 1px solid #3c3b22;
+      }
+      &.warning {
+        background: linear-gradient(#321e1e, #201010);
+        border: 1px solid #452929;
+        border-right: 1px solid #3c2222;
+        border-left: 1px solid #3c2222;
+      }
+      &:hover {
+        box-shadow: inset 0px 0px 15px rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+.floatingButtons {
+  position: absolute;
+  bottom: 70px;
+  text-align: center;
+  width: 305px;
+  button {
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 20px;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.35);
+    border-radius: 3px;
+    padding: 6px 15px;
+    color: #d7a965;
+    box-shadow: 0px 0px 6px 2px black;
+    font-family: Montserrat;
+    outline: none;
+    cursor: pointer;
+    margin: 5px auto;
+    background: linear-gradient(#32271e, #201e10);
+    border: 1px solid #772c2c;
+    border-right: 1px solid #772c2c;
+    border-left: 1px solid #772c2c;
+    margin: 0px 2px;
+    &:hover {
+      box-shadow: inset 0px 0px 15px rgba(255, 255, 255, 0.1);
+    }
+  }
+}

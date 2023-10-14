@@ -1,0 +1,71 @@
+.connectPopup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .boxy {
+        color: white;
+        width: 30vw;
+        height: 15vh;
+        text-align: center;
+        background: #0b1b0f;
+        border: 1px dashed #a78b63;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px black;
+        position: relative;
+        .title {
+            color: #d7a965;
+            margin: 2vh;
+            font-size: 16px;
+            font-family: CardNarrow;
+        }
+        .detail {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            bottom: 2vh;
+            color: #ffffff66;
+        }
+        .progress {
+            .loader {
+                display: inline-block;
+                margin: 0px 5px;
+                font-size: 30px;
+                vertical-align: middle;
+                opacity: 0.2;
+                animation: palpit 2.5s linear infinite ;
+                color: rgb(215, 169, 101);
+                &.hearth {
+                    animation-delay: 0.5s;
+                }
+                &.diamond {
+                    animation-delay: 1s;
+                }
+                &.club {
+                    animation-delay: 1.5s;
+                }
+            }
+        }
+    }
+}
+
+@keyframes palpit {
+    0% {
+        color: rgb(215, 169, 101);
+        opacity: 0.2;
+    }
+    50% {
+        color: #47734d;
+        opacity: 1;
+    }
+    100% {
+        color: rgb(215, 169, 101);
+        opacity: 0.2;
+    }
+}
