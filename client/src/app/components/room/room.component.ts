@@ -181,6 +181,10 @@ export class RoomComponent {
       case 'betAction':
         this.players.forEach((player) => (player.action = null));
         const player = this.getPlayerByName(data.data.bot.name);
+
+        if (!player) {
+          return
+        }
         const action =
           data.data?._actions[this.currentState]?.[
             data.data._actions[this.currentState]?.length - 1
