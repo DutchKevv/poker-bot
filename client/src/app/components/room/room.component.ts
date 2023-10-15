@@ -208,6 +208,10 @@ export class RoomComponent {
           const player = this.getPlayerByName(
             data.data.players[winner.position].name
           );
+
+          if (!player) {
+            return
+          }
           player.winning = true;
           this.logs.unshift({
             text: `Winner: ${
