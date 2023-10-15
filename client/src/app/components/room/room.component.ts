@@ -182,11 +182,11 @@ export class RoomComponent {
         this.players.forEach((player) => (player.action = null));
         const player = this.getPlayerByName(data.data.bot.name);
         const action =
-          data.data._actions[this.currentState]?.[
+          data.data?._actions[this.currentState]?.[
             data.data._actions[this.currentState]?.length - 1
           ];
 
-        player.chips = data.data.chips;
+        player.chips = data.data?.chips;
         player.action = action.type;
 
         if (player.action === 'raise' || player.action === 'call') {
