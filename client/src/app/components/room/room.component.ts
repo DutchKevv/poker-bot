@@ -64,7 +64,7 @@ export class RoomComponent {
   isRunning = false;
   pauseWin = false;
 
-  playerIndex = []
+  playerIndex = [];
 
   private events: IGameUpdate[] = [];
   private eventInterval: any;
@@ -82,12 +82,12 @@ export class RoomComponent {
       this.events.push(data);
     });
 
-    this.startGame()
+    this.startGame();
   }
 
   startGame() {
     this.httpClient.post('api/game/start', {}).subscribe((data: any) => {
-      this.start()
+      this.start();
     });
   }
 
@@ -156,14 +156,26 @@ export class RoomComponent {
         if (!this.players.length) {
           this.players = data.data.players;
         } else {
-          this.players[0] = data.data.players.find(player => player.name === this.players[0]?.name)
-          this.players[1] = data.data.players.find(player => player.name === this.players[1]?.name)
-          this.players[2] = data.data.players.find(player => player.name === this.players[2]?.name)
-          this.players[3] = data.data.players.find(player => player.name === this.players[3]?.name)
-          this.players[4] = data.data.players.find(player => player.name === this.players[4]?.name)
-          this.players[5] = data.data.players.find(player => player.name === this.players[5]?.name)
+          this.players[0] = data.data.players.find(
+            (player) => player.name === this.players[0]?.name
+          );
+          this.players[1] = data.data.players.find(
+            (player) => player.name === this.players[1]?.name
+          );
+          this.players[2] = data.data.players.find(
+            (player) => player.name === this.players[2]?.name
+          );
+          this.players[3] = data.data.players.find(
+            (player) => player.name === this.players[3]?.name
+          );
+          this.players[4] = data.data.players.find(
+            (player) => player.name === this.players[4]?.name
+          );
+          this.players[5] = data.data.players.find(
+            (player) => player.name === this.players[5]?.name
+          );
 
-          this.players = this.players.filter(Boolean)
+          this.players = this.players.filter(Boolean);
         }
 
         // this.players = data.data.players.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
@@ -182,13 +194,14 @@ export class RoomComponent {
         this.players.forEach((player) => (player.action = null));
         const player = this.getPlayerByName(data.data.bot.name);
 
-        if (!player) {
-          return
-        }
         const action =
           data.data?._actions[this.currentState]?.[
             data.data._actions[this.currentState]?.length - 1
           ];
+
+        if (!action || !player) {
+          return;
+        }
 
         player.chips = data.data?.chips;
         player.action = action.type;
@@ -214,7 +227,7 @@ export class RoomComponent {
           );
 
           if (!player) {
-            return
+            return;
           }
           player.winning = true;
           this.logs.unshift({
@@ -238,10 +251,9 @@ export class RoomComponent {
 
         break;
       case 'tournamentComplete':
-        console.info('tournamentComplete')
+        console.info('tournamentComplete');
         break;
     }
-    ;
   }
 
   private getPlayerByName(name: string) {
