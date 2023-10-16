@@ -31,13 +31,13 @@ export class JsLocal extends Seat {
     this.emit('ready');
   }
 
-  update(game: any, callback: (error: any, result: any) => void) {
+  async update(game: any, callback: (error: any, result: any) => void) {
     let result: any;
     let startTime = 0
     if (this.debug) {
       startTime = Date.now();
     }
-    result = this.player.update(game);
+    result = await this.player.update(game);
     if (this.debug) {
       console.log(`Execution of "${this.name}" took ${Date.now() - startTime} ms.`);
     }

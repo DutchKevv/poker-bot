@@ -1,7 +1,7 @@
-import { MachinePokerGame } from "../../lib/machine-poker/machine-poker.intefaces";
-import { Bot } from "../bot";
+import { MachinePokerGame } from "../../_vendor/machine-poker/machine-poker.intefaces";
+import { Bot, IBot } from "../bot";
 
-export class RandBot extends Bot  {
+export class RandBot extends Bot implements IBot  {
 
   update(game: MachinePokerGame) {
     if (game.state !== "complete") {

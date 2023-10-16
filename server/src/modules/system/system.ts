@@ -18,7 +18,7 @@ export class System {
   
     init() {
         this.initExpress()
-        this.startScreenReader()
+        // this.startScreenReader()
     }
   
     createGame() {

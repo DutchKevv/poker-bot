@@ -18,7 +18,7 @@ export class AIScreenReader {
         setInterval(async () => {
             const screenshot = await this.getScreenshot()
             this.predictCardsFromImg(screenshot)
-        }, 1000)
+        }, 10000)
     }
 
     async getScreenshot(): Promise<Uint8Array> {

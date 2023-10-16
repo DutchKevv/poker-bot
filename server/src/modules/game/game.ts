@@ -2,7 +2,7 @@ import CallBot from '../../bots/call/callBot'
 import RandBot from '../../bots/rand/randBot'
 import FoldBot from '../../bots/fold/foldBot'
 import AIBot from '../../bots/ai/ai.bot'
-import { seats, create } from '../../lib/machine-poker/index'
+import { seats, create } from '../../_vendor/machine-poker/index'
 import { IGameObserverData, IPlayer } from './game.inteface'
 import { System } from '../system/system'
 
