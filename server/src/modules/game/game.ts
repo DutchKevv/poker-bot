@@ -2,25 +2,52 @@ import CallBot from '../../bots/call/callBot'
 import RandBot from '../../bots/rand/randBot'
 import FoldBot from '../../bots/fold/foldBot'
 import AIBot from '../../bots/ai/ai.bot'
-import { seats, create } from '../../_vendor/machine-poker/index'
+import { seats, create, MachinePoker } from '../../_vendor/machine-poker/index'
 import { IGameObserverData, IPlayer } from './game.inteface'
 import { System } from '../system/system'
 
-const LocalSeat = seats.JsLocal
+export enum GameState {
+    complete = 'complete',
+    tournamentComplete = 'tournamentComplete',
+    betAction = 'betAction',
+    roundStart = 'roundStart',
+    stateChange = 'stateChange',
+}
 
 export class Game {
-    table: any
+
+    static GAME_COUNTER = 0
+
+    id = Game.GAME_COUNTER++
+
+    table: MachinePoker
     players: IPlayer[]
 
+    /**
+     * machine-poker package uses this instance to emit game state events
+     */
+    complete = (data: IGameObserverData) => {
+        this.emitEvent(GameState.complete, data)
+    }
+
+    tournamentComplete = (data: IGameObserverData) => {
+        this.emitEvent(GameState.tournamentComplete, data)
+    }
+
+    betAction = (data: IGameObserverData) => {
+        this.emitEvent(GameState.betAction, data)
+    }
+
+    roundStart = (data: IGameObserverData) => {
+        this.emitEvent(GameState.roundStart, data)
+    }
+
+    stateChange = (data: IGameObserverData) => {
+        data.pot = data.players.reduce((pot, player) => pot += player.wagered || 0, 0)
+        this.emitEvent(GameState.stateChange, data)
+    }
+
     constructor(private system: System) {}
-
-    start() {
-        this.table.start()
-    }
-
-    stop() {
-        this.table.stop()
-    }
 
     create() {
         this.table = create({
@@ -28,46 +55,22 @@ export class Game {
         })
 
         this.players = [
-            LocalSeat.create(CallBot),
-            LocalSeat.create(AIBot),
-            LocalSeat.create(FoldBot),
-            LocalSeat.create(RandBot),
-            // LocalSeat.create(CustomBot({ name: 'CustomBot' })),
-            // LocalSeat.create(FoldBot({ name: 'FoldBot' })),
-            // LocalSeat.create(RandBot({ name: 'RandBot' })),
-            // LocalSeat.create(CallBot({ name: 'CallBot2' })),
-            // LocalSeat.create(CallBot({ name: 'CallBot3' })),
+            seats.JsLocal.create(CallBot),
+            seats.JsLocal.create(AIBot),
+            seats.JsLocal.create(FoldBot),
+            seats.JsLocal.create(RandBot),
         ]
 
         this.table.addPlayers(this.players)
+        this.table.addObserver(this)
+    }
 
-        const observers = {
-            complete: (data: IGameObserverData) => {
-                this.system.io.emit('game-update', { type: 'complete', data })
-            },
-            tournamentComplete: (data: IGameObserverData) => {
-                this.system.io.emit('game-update', { type: 'tournamentComplete', data })
-            },
-            betAction: (data: IGameObserverData) => {
-                this.system.io.emit('game-update', { type: 'betAction', data })
-            },
-            roundStart: (data: IGameObserverData) => {
-                this.system.io.emit('game-update', { type: 'roundStart', data })
-            },
-            stateChange: (data: IGameObserverData) => {
-                let pot = 0
-                for (let i = 0; i < data.players.length; i++) {
-                    const player = data.players[i]
-                    if (player.wagered != null) {
-                        pot += player.wagered
-                    }
-                }
+    start() {
+        console.log(33434)
+        this.table.start()
+    }
 
-                data.pot = pot
-                this.system.io.emit('game-update', { type: 'stateChange', data })
-            },
-        }
-
-        this.table.addObserver(observers)
+    private emitEvent(type: string, data: IGameObserverData) {
+        this.system.api.io.emit('game-update', { id: this.id, type, data })
     }
 }

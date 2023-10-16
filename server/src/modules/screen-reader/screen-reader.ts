@@ -1,47 +1,34 @@
-import screenshot from 'screenshot-desktop'
 import { join } from 'path'
-import { mkdirSync, readFileSync } from 'fs'
 import { Rank, Tensor, node, loadLayersModel, image } from '@tensorflow/tfjs-node'
+import { getScreenshot } from './screen-reader.util';
+import { System } from '../system/system';
 
-const FILE_DIR = join(__dirname, '../../../data/screenshots')
+const SCREEN_READER_INTERVAL = 10000
 const MODEL_ROOT = join(__dirname, "./models");
 
-const modelURL = join(MODEL_ROOT, '1', "model.json");
-const metadataURL = join(MODEL_ROOT, '1', "metadata.json");
-
-mkdirSync(FILE_DIR, { recursive: true })
-
 export class AIScreenReader {
-    constructor() {}
+    constructor(public system: System) {}
 
-    startScreenshotInterval() {
+    start() {
         setInterval(async () => {
-            const screenshot = await this.getScreenshot()
-            this.predictCardsFromImg(screenshot)
-        }, 10000)
+            const screenshotImg = await getScreenshot()
+            this.predictPlayersFromImg(screenshotImg)
+        }, SCREEN_READER_INTERVAL)
     }
 
-    async getScreenshot(): Promise<Uint8Array> {
-        const now = Date.now()
-        const filename = join(FILE_DIR, `${now}.png`)
-        const displays = await screenshot.listDisplays()
-
-        // TODO: returning IMG doesnt work
-        const img = await screenshot({
-            format: 'png',
-            filename,
-            screen: displays[displays.length - 1].id,
-        })
-
-        console.log(typeof readFileSync(filename))
-        return readFileSync(filename)
-    }
-
-    async predictCardsFromImg(img: Uint8Array) {
-        const tfimage = node.decodeImage(img, 3).expandDims()
+    async predictPlayersFromImg(img: Uint8Array) {
+        // load tensorflow model
+        const modelURL = join(MODEL_ROOT, '1', "model.json");
+        const metadataURL = join(MODEL_ROOT, '1', "metadata.json");     
         const model = await loadLayersModel(`file://${modelURL}`)
+
+        // turn .png data to usable tfjs tensor
+        const tfimage = node.decodeImage(img, 3).expandDims()
         const resize = image.resizeBilinear(tfimage as any, [224, 224])
+
+        // perform prediction
         const predictions = model.predict(resize) as Tensor<Rank>
+
         // const saveResults = await model.save('./test.sdf');
         console.log(2222, predictions, predictions.print())
         // const model = await tf.loadLayersModel(`file://${modelURL}`)
