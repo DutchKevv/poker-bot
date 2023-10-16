@@ -1,4 +1,4 @@
-import { MachinePokerGame } from '../../../lib/machine-poker/machine-poker.intefaces'
+import { MachinePokerGame } from '../../lib/machine-poker/machine-poker.intefaces'
 import { Bot } from '../bot'
 
 export class CallBot extends Bot {

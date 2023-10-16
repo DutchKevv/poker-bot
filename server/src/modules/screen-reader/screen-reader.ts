@@ -1,9 +1,9 @@
 import screenshot from 'screenshot-desktop'
 import { join } from 'path'
 import { mkdirSync, readFileSync } from 'fs'
-import tf, { Rank, Tensor } from '@tensorflow/tfjs-node'
+import { Rank, Tensor, node, loadLayersModel, image } from '@tensorflow/tfjs-node'
 
-const FILE_DIR = join(__dirname, '../../data/screenshots')
+const FILE_DIR = join(__dirname, '../../../data/screenshots')
 const MODEL_ROOT = join(__dirname, "./models");
 
 const modelURL = join(MODEL_ROOT, '1', "model.json");
@@ -38,9 +38,9 @@ export class AIScreenReader {
     }
 
     async predictCardsFromImg(img: Uint8Array) {
-        const tfimage = tf.node.decodeImage(img, 3).expandDims()
-        const model = await tf.loadLayersModel(`file://${modelURL}`)
-        const resize = tf.image.resizeBilinear(tfimage as any, [224, 224])
+        const tfimage = node.decodeImage(img, 3).expandDims()
+        const model = await loadLayersModel(`file://${modelURL}`)
+        const resize = image.resizeBilinear(tfimage as any, [224, 224])
         const predictions = model.predict(resize) as Tensor<Rank>
         // const saveResults = await model.save('./test.sdf');
         console.log(2222, predictions, predictions.print())

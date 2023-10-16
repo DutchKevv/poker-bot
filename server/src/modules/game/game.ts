@@ -1,33 +1,12 @@
-import CallBot from './bots/call/callBot'
-import RandBot from './bots/rand/randBot'
-import FoldBot from './bots/fold/foldBot'
-import AIBot from './bots/ai/ai.bot'
-import { System } from '../server'
-import { seats, create } from '../lib/machine-poker/index'
+import CallBot from '../../bots/call/callBot'
+import RandBot from '../../bots/rand/randBot'
+import FoldBot from '../../bots/fold/foldBot'
+import AIBot from '../../bots/ai/ai.bot'
+import { seats, create } from '../../lib/machine-poker/index'
+import { IGameObserverData, IPlayer } from './game.inteface'
+import { System } from '../system/system'
 
 const LocalSeat = seats.JsLocal
-
-export interface IGameObserverData {
-    type: string
-    players: {
-        wagered?: number
-    }[]
-    pot?: number
-}
-
-export interface IPlayer {
-    bot: any
-    chips: number
-    wagered: number
-    payout: number
-    ante: number
-    blind: number
-    name: string
-    state: string
-    hand: any
-    cards: any[]
-    reset(): void
-}
 
 export class Game {
     table: any

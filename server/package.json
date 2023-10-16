@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx nodemon",
     "build": "rimraf ./dist && npx tsc",
-    "prod": "forever start ./dist/server.js"
+    "prod": "forever start ./dist/index.js"
   },
   "author": "",
   "license": "ISC",
