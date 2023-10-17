@@ -1,7 +1,6 @@
 :host {
-  flex-shrink: 0;
-  width: 200px;
-  border-right: 1px solid gray;
+  display: block;
+  border-bottom: 1px solid gray;
   background: #c5d2da;
   button.active {
     background-color: #1bff00;
@@ -10,6 +9,6 @@
 
 .controls-content {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   padding: 5px;
 }

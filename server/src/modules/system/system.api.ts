@@ -2,16 +2,14 @@ import { Socket, Server } from "socket.io";
 import express from "express";
 import { json } from "body-parser";
 import http from "http";
-import { System } from "./system";
 import gameRouter from "../game/game.routes";
+import { Base } from "../base";
 
-export class SystemApi {
+export class SystemApi extends Base {
     
     app: express.Application
     server: http.Server
     io: Server
-
-    constructor(public system: System) {}
 
     init() {
         const port = this.system.config.api.port

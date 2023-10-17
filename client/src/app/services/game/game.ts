@@ -10,20 +10,20 @@ const suits = {
 }
 
 export class Game {
-    private winnerDelay = 3000
-    private winnerDelayTimeout: any
-    private eventInterval: any
-    private fireworks = []
-
     isRunning = false
     pauseWin = false
     players: IPlayer[] = []
     cards: ICard[] = []
     logs: any[] = []
     currentState: string
-    chips: number = 0
+    chips = 0
     eventSpeed = 550
     events: IGameUpdate[] = []
+
+    private winnerDelay = 3000
+    private winnerDelayTimeout: any
+    private eventInterval: any
+    private fireworks = []
 
     constructor(public id: number, public options: any) {
 

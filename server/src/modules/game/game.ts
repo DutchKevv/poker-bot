@@ -5,6 +5,7 @@ import AIBot from '../../bots/ai/ai.bot'
 import { seats, create, MachinePoker } from '../../_vendor/machine-poker/index'
 import { IGameObserverData, IPlayer } from './game.inteface'
 import { System } from '../system/system'
+import { Base } from '../base'
 
 export enum GameState {
     complete = 'complete',
@@ -14,7 +15,7 @@ export enum GameState {
     stateChange = 'stateChange',
 }
 
-export class Game {
+export class Game extends Base {
 
     static GAME_COUNTER = 0
 
@@ -46,8 +47,6 @@ export class Game {
         data.pot = data.players.reduce((pot, player) => pot += player.wagered || 0, 0)
         this.emitEvent(GameState.stateChange, data)
     }
-
-    constructor(private system: System) {}
 
     create() {
         this.table = create({

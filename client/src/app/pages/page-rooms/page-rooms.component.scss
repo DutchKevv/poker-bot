@@ -1,0 +1,17 @@
+.games-overview {
+  border-bottom: 1px solid black;
+  display: flex;
+  align-items: center;
+
+  button {
+     margin-right: 20px;
+  }
+}
+
+.rooms-control {
+  border-bottom: 1px solid black;
+}
+
+app-room {
+  border: 1px solid gray;
+}

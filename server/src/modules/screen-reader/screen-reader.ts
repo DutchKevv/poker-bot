@@ -1,13 +1,12 @@
 import { join } from 'path'
 import { Rank, Tensor, node, loadLayersModel, image } from '@tensorflow/tfjs-node'
 import { getScreenshot } from './screen-reader.util';
-import { System } from '../system/system';
+import { Base } from '../base';
 
 const SCREEN_READER_INTERVAL = 10000
 const MODEL_ROOT = join(__dirname, "./models");
 
-export class AIScreenReader {
-    constructor(public system: System) {}
+export class AIScreenReader extends Base {
 
     start() {
         setInterval(async () => {

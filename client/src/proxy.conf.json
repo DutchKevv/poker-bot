@@ -6,6 +6,6 @@
   "/sock/*": {
     "target": "http://localhost:3000/socket.io/",
     "ws": true,
-    "logLevel": "info"
+    "logLevel": "error"
   }
 }

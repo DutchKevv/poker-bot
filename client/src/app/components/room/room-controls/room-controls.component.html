@@ -1,40 +1,25 @@
-<h6 style="border-bottom: 1px solid gray">Controls</h6>
+<div class="controls-content">
+  <div>
+    <button class="btn" (click)="game.start()" [ngClass]="{ active: game.isRunning }">&#9658;</button>
+    <button class="btn" (click)="game.stop()" [ngClass]="{ active: !game.isRunning }">&#10073;&#10073;</button>
+  </div>
 
-  <div class="controls-content">
-    <div>
-      <button class="btn" (click)="game.start()" [ngClass]="{ active: game.isRunning }">
-        &#9658;
-      </button>
-      <button class="btn" (click)="game.stop()" [ngClass]="{ active: !game.isRunning }">
-        &#10073;&#10073;
-      </button>
-    </div>
-
-    <hr />
-    <div>
-      <label for="customRange1" class="form-label"
-        >Speed ({{ game.eventSpeed }}ms)</label
-      >
+  <hr />
+  <div>
+    <label for="customRange1" class="form-label">Speed ({{ game.eventSpeed }}ms)</label>
+    <input type="range" class="form-range" id="customRange1" (change)="onChangeSpeed($event)" />
+  </div>
+  <hr />
+  <div>
+    <div class="form-check">
       <input
-        type="range"
-        class="form-range"
-        id="customRange1"
-        (change)="onChangeSpeed($event)"
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="flexCheckDefault"
+        (change)="togglePauseWin($any($event.target).checked)"
       />
-    </div>
-    <hr />
-    <div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          value=""
-          id="flexCheckDefault"
-          (change)="togglePauseWin($any($event.target).checked)"
-        />
-        <label class="form-check-label" for="flexCheckDefault">
-          Pause on win</label
-        >
-      </div>
+      <label class="form-check-label" for="flexCheckDefault"> Pause on win</label>
     </div>
   </div>
+</div>

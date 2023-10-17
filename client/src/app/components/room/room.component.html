@@ -1,3 +1,6 @@
-<app-room-controls [game]="game" *ngIf="game"></app-room-controls>
-<app-room-table [game]="game" *ngIf="game"></app-room-table>
+<div class="wrapper">
+  <app-room-controls [game]="game" *ngIf="game"></app-room-controls>
+  <app-room-table [game]="game" *ngIf="game"></app-room-table>
+</div>
+
 <app-room-logs [game]="game" *ngIf="game"></app-room-logs>
