@@ -1,0 +1,19 @@
+:host {
+  width: 200px;
+  border-left: 1px solid gray;
+  height: 100vh;
+  flex-shrink: 0;
+  overflow-y: scroll;
+}
+
+.logs-content {
+  overflow-y: scroll;
+}
+
+.log-line {
+  // height: 10px;
+  border-bottom: 1px solid gray;
+  font-size: 12px;
+  margin: 0;
+  padding: 0 4px;
+}

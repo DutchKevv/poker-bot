@@ -1,6 +1,6 @@
-import { Socket } from "socket.io";
+import { Socket, Server } from "socket.io";
 import express from "express";
-import { Server } from "socket.io";
+import { json } from "body-parser";
 import http from "http";
 import { System } from "./system";
 import gameRouter from "../game/game.routes";
@@ -24,6 +24,7 @@ export class SystemApi {
         this.io = new Server(this.server)
     
         this.app.use(express.static(assets))
+        this.app.use(json())
 
         // set routes
         gameRouter(this.system)

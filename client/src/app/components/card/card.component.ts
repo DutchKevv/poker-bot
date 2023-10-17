@@ -1,19 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ICard } from '../room/room.component';
+import { Component, Input } from '@angular/core'
+import { ICard } from '../../services/game/game.interface'
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss']
+  styleUrls: ['./card.component.scss'],
 })
-export class CardComponent implements OnInit {
-
-  @Input({required: true})
+export class CardComponent {
+  @Input({ required: true })
   card: ICard
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

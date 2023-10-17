@@ -55,8 +55,8 @@ export class Game {
         })
 
         this.players = [
-            seats.JsLocal.create(CallBot),
             seats.JsLocal.create(AIBot),
+            seats.JsLocal.create(CallBot),
             seats.JsLocal.create(FoldBot),
             seats.JsLocal.create(RandBot),
         ]
@@ -66,7 +66,6 @@ export class Game {
     }
 
     start() {
-        console.log(33434)
         this.table.start()
     }
 

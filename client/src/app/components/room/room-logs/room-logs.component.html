@@ -1,0 +1,10 @@
+<h6 style="border-bottom: 1px solid gray">Logs</h6>
+
+<div class="logs-content">
+  <p class="log-line" *ngFor="let log of game.logs">
+    <b style="min-width: 80px; display: inline-block">{{
+      log.player?.name
+    }}</b
+    >:&nbsp;<i>{{ log.text }}</i>
+  </p>
+</div>

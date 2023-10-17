@@ -11,6 +11,6 @@ export class SocketService {
   constructor() {}
 
   init() {
-    this.socket = io();
+    this.socket = io()
   }
 }

@@ -1,11 +1,9 @@
-import { Game } from '../game/game'
+import { GameController } from '../game/game.controller'
 import { AIScreenReader } from '../screen-reader/screen-reader'
 import { SystemApi } from './system.api'
 import { ISystemOptions } from './system.interface'
 
 export class System {
-    // current active games
-    games: Game[] = []
 
     // read from screen
     screenReader: AIScreenReader
@@ -15,6 +13,9 @@ export class System {
 
     // THE system config...
     config: ISystemOptions
+
+
+    gameController = new GameController(this)
 
     constructor(options: ISystemOptions) {
         // TODO: convert options to config
@@ -29,12 +30,5 @@ export class System {
     startScreenReader() {
         this.screenReader = new AIScreenReader(this)
         this.screenReader.start()
-    }
-
-    createGame(): Game {
-        const game = new Game(this)
-        this.games.push(game)
-        game.create()
-        return game
     }
 }

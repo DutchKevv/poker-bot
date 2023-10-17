@@ -1,0 +1,47 @@
+<div class="poker-table-content">
+  <div class="poker-table">
+    <div class="cards">
+      <app-card *ngFor="let card of game.cards" [card]="card"></app-card>
+    </div>
+
+    <div class="details" *ngIf="game.chips">
+      <img class="stack-image" src="assets/images/poker_stack.png" alt="poker-chips" />
+      <p class="pot-chips">
+        ${{ game.chips }}
+        <sup *ngIf="game.currentState" style="color: gray; font-style: italic">({{ game.currentState }})</sup>
+      </p>
+    </div>
+  </div>
+
+  <div
+    *ngFor="let player of getSorted(game.players); let i = index"
+    [ngClass]="{
+      winning: player?.winning,
+      active: player?.state === 'active'
+    }"
+    id="player-{{ player?.name }}"
+    class="player player-{{ i + 1 }}"
+  >
+    <ng-container *ngIf="player">
+      <div class="fireworks"></div>
+      <!-- <img *ngIf="player.wagered" class="stack-image" src="assets/images/poker_stack.png" alt="poker-chips" /> -->
+
+      <div class="player-cards">
+        <app-card *ngFor="let card of player.cards" [card]="card"></app-card>
+      </div>
+
+      <!-- <div class="player-avatar"></div> -->
+      <div class="player-details">
+        <p class="player-name">{{ player.name }}</p>
+        <p class="player-chips">${{ player.chips }}</p>
+      </div>
+
+      <div class="player-blind" *ngIf="player.blind > 0">
+        {{ player.blind }}
+      </div>
+      <div class="player-action" *ngIf="player.action" class="player-action--{{ player.action }}">
+        {{ player.action }}
+      </div>
+    </ng-container>
+  </div>
+</div>
