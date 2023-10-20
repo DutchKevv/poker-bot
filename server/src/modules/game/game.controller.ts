@@ -13,14 +13,19 @@ export class GameController extends Base {
 
     games: Game[] = []
     
-    createGame(): Game {
+    create(): Game {
         const game = new Game(this.system)
         this.games.push(game)
         game.create()
         return game
     }
 
-    getGameById(id: number): Game | undefined {
+    getById(id: number): Game | undefined {
         return this.games.find(game => game.id === id)
+    }
+
+    stopAll() {
+        this.games.forEach(game => game.stop())
+        this.games = []
     }
 }

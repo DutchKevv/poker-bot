@@ -1,16 +1,17 @@
 <div class="controls-content">
-  <div>
+  <span class="header">#{{game.id}}</span>
+
+  <div class="control-buttons">
     <button class="btn" (click)="game.start()" [ngClass]="{ active: game.isRunning }">&#9658;</button>
     <button class="btn" (click)="game.stop()" [ngClass]="{ active: !game.isRunning }">&#10073;&#10073;</button>
   </div>
 
-  <hr />
   <div>
     <label for="customRange1" class="form-label">Speed ({{ game.eventSpeed }}ms)</label>
     <input type="range" class="form-range" id="customRange1" (change)="onChangeSpeed($event)" />
   </div>
-  <hr />
-  <div>
+
+  <div style="margin-left: auto;">
     <div class="form-check">
       <input
         class="form-check-input"

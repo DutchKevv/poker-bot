@@ -24,6 +24,6 @@ export class PageRoomsComponent implements OnInit {
   }
 
   stopAll() {
-
+    this.gameService.removeAll().subscribe()
   }
 }

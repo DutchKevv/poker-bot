@@ -2,6 +2,7 @@ import { MachinePokerGame } from "../_vendor/machine-poker/machine-poker.intefac
 
 export interface IBotOptions {
     name?: string
+    epochs?: number
 }
 
 export interface IBot {

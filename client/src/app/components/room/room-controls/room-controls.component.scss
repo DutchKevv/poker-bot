@@ -7,8 +7,18 @@
   }
 }
 
+.header {
+  border-right: 1px solid black;
+  padding: 0 20px 0 0;
+}
 .controls-content {
   display: flex;
+  align-items: center;
   // flex-direction: column;
   padding: 5px;
+}
+
+
+.control-buttons {
+  margin-right: 10px;
 }

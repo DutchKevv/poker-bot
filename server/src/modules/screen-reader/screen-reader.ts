@@ -29,7 +29,7 @@ export class AIScreenReader extends Base {
         const predictions = model.predict(resize) as Tensor<Rank>
 
         // const saveResults = await model.save('./test.sdf');
-        console.log(2222, predictions, predictions.print())
+        // console.log(2222, predictions, predictions.print())
         // const model = await tf.loadLayersModel(`file://${modelURL}`)
 
         // const tfimage = tf.node.decodeImage(img);

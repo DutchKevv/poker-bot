@@ -22,12 +22,22 @@ export class System {
         this.config = options
     }
 
-    startApi() {
+    init() {
+        if (this.config.screenReader.enabled) {
+            this.startScreenReader()
+        }
+        
+        if (this.config.api.enabled) {
+            this.startApi()
+        }
+    }
+
+    private startApi() {
         this.api = new SystemApi(this)
         this.api.init()
     }
 
-    startScreenReader() {
+    private startScreenReader() {
         this.screenReader = new AIScreenReader(this)
         this.screenReader.start()
     }

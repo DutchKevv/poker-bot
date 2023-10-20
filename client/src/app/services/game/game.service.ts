@@ -16,6 +16,7 @@ export class GameService {
   }
 
   init() {
+    this.getRunningGames().subscribe()
     this.socketService.socket.on('game-update', (data: IGameUpdate) => {
       this.onGameUpdate(data)
     })
@@ -38,10 +39,30 @@ export class GameService {
   }
 
   getById(id: number) {
-    return this.games.find(game => game.id === id)
+    return this.games.find((game) => game.id === id)
+  }
+
+  removeAll() {
+    return this.httpClient.delete('api/game', {}).pipe(
+      tap(() => {
+        this.games = []
+      })
+    )
   }
 
   private onGameUpdate(data: IGameUpdate) {
     this.getById(data.id)?.events.push(data)
+  }
+
+  private getRunningGames() {
+    return this.httpClient.get('api/game', {}).pipe(
+      tap((games: any) => {
+        games.forEach(gameData => {
+          const game = new Game(gameData.id, gameData)
+          this.games.push(game)
+        })
+
+      })
+    )
   }
 }

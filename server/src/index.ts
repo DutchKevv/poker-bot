@@ -4,13 +4,15 @@ import { join } from "path";
 
 const config: ISystemOptions = {
     api: {
+        enabled: true,
         port: 3000,
         host: "localhost",
         public: join(__dirname, "../public/app")
+    },
+    screenReader: {
+        enabled: false
     }
 }
 
 const system = new System(config)
-system.startScreenReader()
-system.startApi()
-
+system.init()

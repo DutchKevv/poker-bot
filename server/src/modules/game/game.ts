@@ -68,6 +68,10 @@ export class Game extends Base {
         this.table.start()
     }
 
+    stop() {
+        
+    }
+
     private emitEvent(type: string, data: IGameObserverData) {
         this.system.api.io.emit('game-update', { id: this.id, type, data })
     }
