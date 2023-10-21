@@ -9,6 +9,7 @@ const MODEL_ROOT = join(__dirname, "./models");
 export class AIScreenReader extends Base {
 
     start() {
+        console.log(453434)
         setInterval(async () => {
             const screenshotImg = await getScreenshot()
             this.predictPlayersFromImg(screenshotImg)
@@ -28,6 +29,7 @@ export class AIScreenReader extends Base {
         // perform prediction
         const predictions = model.predict(resize) as Tensor<Rank>
 
+        console.log(predictions)
         // const saveResults = await model.save('./test.sdf');
         // console.log(2222, predictions, predictions.print())
         // const model = await tf.loadLayersModel(`file://${modelURL}`)

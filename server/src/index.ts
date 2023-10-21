@@ -10,7 +10,7 @@ const config: ISystemOptions = {
         public: join(__dirname, "../public/app")
     },
     screenReader: {
-        enabled: false
+        enabled: true
     }
 }
 
