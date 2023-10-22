@@ -4,9 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "train": "node train.js",
+    "predict": "node predict.js",
     "train:cards": "python test.py",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.12.0",
+    "@tensorflow/tfjs-node-gpu": "4.12.0",
+    "canvas": "^2.11.2"
+  },
+  "devDependencies": {
+    "@tensorflow/tfjs-node": "4.12.0",
+    "buffer": "^6.0.3",
+    "clang-format": "~1.8.0",
+    "cross-env": "^7.0.3",
+    "parcel": "~2.10.0",
+    "process": "^0.11.10",
+    "yalc": "~1.0.0-pre.53"
+  }
 }

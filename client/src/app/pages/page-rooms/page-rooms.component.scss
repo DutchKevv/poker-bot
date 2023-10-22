@@ -16,3 +16,15 @@
 app-room {
   border: 1px solid gray;
 }
+
+ng::deep {
+  .highlighter {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(255, 0, 0, 0.5);
+  }
+}

@@ -19,6 +19,6 @@ export async function getScreenshot(): Promise<Uint8Array> {
         screen: displays[displays.length - 1].id,
     })
 
-    console.log(typeof readFileSync(filename))
+    // console.log(typeof readFileSync(filename))
     return readFileSync(filename)
 }

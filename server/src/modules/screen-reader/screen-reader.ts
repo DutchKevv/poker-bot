@@ -1,7 +1,10 @@
 import { join } from 'path'
-import { Rank, Tensor, node, loadLayersModel, image } from '@tensorflow/tfjs-node'
+import { Rank, Tensor, node, loadLayersModel, image, tensor1d, stack, dispose, Tensor1D } from '@tensorflow/tfjs-node'
 import { getScreenshot } from './screen-reader.util';
 import { Base } from '../base';
+import { readFileSync } from 'fs';
+
+const imagePath = 'file://' + join(__dirname, '../../../../training/data/models/cards/model.json');
 
 const SCREEN_READER_INTERVAL = 10000
 const MODEL_ROOT = join(__dirname, "./models");
@@ -9,14 +12,49 @@ const MODEL_ROOT = join(__dirname, "./models");
 export class AIScreenReader extends Base {
 
     start() {
-        console.log(453434)
         setInterval(async () => {
             const screenshotImg = await getScreenshot()
             this.predictPlayersFromImg(screenshotImg)
         }, SCREEN_READER_INTERVAL)
-    }
+    }   
 
     async predictPlayersFromImg(img: Uint8Array) {
+        const model = await loadLayersModel(imagePath);
+        model.summary();
+        // turn .png data to usable tfjs tensor
+        const tfimage = node.decodeImage(img, 3).expandDims()
+        // var img = tf.browser.fromPixels(video.elt);
+    
+        var smallimg = image.resizeBilinear(tfimage as any, [224, 224]);
+        // var resized = tf.cast(smallimg, 'float32');
+        // img = tf.reshape(resized, ([-1, 224, 224, 3]));
+        // const resize = image.resizeBilinear(tfimage, [224, 224])
+        const prediction = await model.predict(smallimg)
+        let predictionData
+        if (Array.isArray(prediction)) {
+            predictionData = await prediction[0].data()
+        } else {
+            predictionData = await prediction.data()
+        }
+    
+        const targetTensors: Tensor1D[] = []
+
+        for (let i = 0; i < 10; i++) {
+            const boundingBox = [0, 1224, 0, 1224]
+            const targetTensor = tensor1d([1].concat(boundingBox))
+            targetTensors.push(targetTensor)
+        }
+
+        const targets = stack(targetTensors)
+    
+        const targetsArray = Array.from(await targets.data());
+        const boundingBoxArray = targetsArray.slice(1);
+        const data = (await (prediction as Tensor<Rank>).data())
+        console.log('boundingBoxArray', new Int8Array(data.buffer, data.byteOffset, data.length))
+        this.system.api.io.emit('screen-reader-update', { data: data.buffer })
+    }
+
+    async predictPlayersFromImg2(img: Uint8Array) {
         // load tensorflow model
         const modelURL = join(MODEL_ROOT, '1', "model.json");
         const metadataURL = join(MODEL_ROOT, '1', "metadata.json");     
@@ -28,8 +66,12 @@ export class AIScreenReader extends Base {
 
         // perform prediction
         const predictions = model.predict(resize) as Tensor<Rank>
+        let highestIndex = predictions.argMax().arraySync();
+        let predictionArray = predictions.arraySync();
 
-        console.log(predictions)
+        console.log(2323, predictionArray)
+
+ 
         // const saveResults = await model.save('./test.sdf');
         // console.log(2222, predictions, predictions.print())
         // const model = await tf.loadLayersModel(`file://${modelURL}`)
