@@ -1,0 +1,17 @@
+version : "3.7"
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    # image: tensorflow/tensorflow:2.5.0
+    container_name: poker-app
+    restart: always
+    tty: true
+    expose:
+      - 660
+      - 80:8080
+      - 8888:8888
+    volumes:
+      - ./project:/project:rw

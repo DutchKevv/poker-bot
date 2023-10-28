@@ -1,5 +1,6 @@
 import { join } from 'path'
 import { Rank, Tensor, node, loadLayersModel, image, tensor1d, stack, dispose, Tensor1D } from '@tensorflow/tfjs-node'
+import * as tflite from '@tensorflow/tfjs-tflite';
 import { getScreenshot } from './screen-reader.util';
 import { Base } from '../base';
 import { readFileSync } from 'fs';
@@ -31,6 +32,7 @@ export class AIScreenReader extends Base {
         // const resize = image.resizeBilinear(tfimage, [224, 224])
         const prediction = await model.predict(smallimg)
         let predictionData
+        console.log(prediction)
         if (Array.isArray(prediction)) {
             predictionData = await prediction[0].data()
         } else {
@@ -50,7 +52,7 @@ export class AIScreenReader extends Base {
         const targetsArray = Array.from(await targets.data());
         const boundingBoxArray = targetsArray.slice(1);
         const data = (await (prediction as Tensor<Rank>).data())
-        console.log('boundingBoxArray', new Int8Array(data.buffer, data.byteOffset, data.length))
+        // console.log('boundingBoxArray', new Int8Array(data.buffer, data.byteOffset, data.length))
         this.system.api.io.emit('screen-reader-update', { data: data.buffer })
     }
 

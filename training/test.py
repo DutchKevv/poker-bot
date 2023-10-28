@@ -1,134 +1,239 @@
-'''
-Reference repo: https://github.com/EdjeElectronics/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10/blob/master/generate_tfrecord.py
-It's necessary to install the tensorflow object detection first
-'''
-
 import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import numpy as np
 import pandas as pd
-import argparse
-import logging
-import io
-import os
-
+import cv2  
+import os  
+from random import shuffle
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import imread, imshow, subplots, show
 from PIL import Image
-from object_detection.utils import dataset_util
-from collections import namedtuple, OrderedDict
+import scipy
+# tf.compat.v1.disable_eager_execution()
+image = imread('data/cards/card_j_diamond.png')
+images = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+imshow(images[0])
+# show()
+print("HOI 1111")
+data_generator = ImageDataGenerator(rotation_range=90, brightness_range=(0.5, 1.5), shear_range=15.0, zoom_range=[.3, .8])
+data_generator.fit(images)
+image_iterator = data_generator.flow(images)
 
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+plt.figure(figsize=(16,16))
+for i in range(16):
+    plt.subplot(4,4,i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(image_iterator.next()[0].astype('int'))
+# plt.show()
 
-class TFRecord:
-    def __init__(self, labelmap_file) -> None:
-        f = open(labelmap_file, "r")
-        labelmap = f.read()
-        self.class_names = self.init_names(labelmap)
+data=[]
 
-    def init_names(self, labelmap) -> dict:
-        items = labelmap.split('item')[1:]
-        items_dict = {}
-        for item in items:
-            name = str(item.split('name')[1].split('"')[1])
-            name_id = int(item.split('name')[1].split('id')[1].\
-                                                split(": ")[1].split('}')[0])
+for i, img in tqdm(enumerate(os.listdir('data/cards'))):
+    label=i
+    
+    img = cv2.imread('data/cards/'+img, cv2.IMREAD_GRAYSCALE)
+    img = cv2.resize(img, (180, 180))
+    imgs = img.reshape((1, img.shape[0], img.shape[1], 1))
+    data_generator = ImageDataGenerator(rotation_range=90, brightness_range=(0.5, 1.5), shear_range=15.0, zoom_range=[.3, .8])
+    data_generator.fit(imgs)
+    image_iterator = data_generator.flow(imgs)
+    
+    for x in range(750):
+        img_transformed=image_iterator.next()[0].astype('int')/255
+        data.append([img_transformed, label])
 
-            items_dict[name] = name_id
-        return items_dict
+shuffle(data)
+print("HOI 222")
+np.save('export/models/model.npy', data)
+print("HOI 23232")
+data = np.load('export/models/model.npy', allow_pickle=True)
+print("HOI 23232")
+train=data[:3700]
+test=data[3700:]
 
-    def class_text_to_int(self, row_label) -> int:
-        if self.class_names[row_label] is not None:
-            return self.class_names[row_label]
-        else:
-            None
+train_X=[]
+train_y=[]
+for x in train:
+    train_X.append(x[0]) 
+    train_y.append(x[1])
+    
+test_X=[]
+test_y=[]
+for x in test:
+    test_X.append(x[0]) 
+    test_y.append(x[1]) 
 
-    def split(self, df, group):
-        data = namedtuple('data', ['filename', 'object'])
-        gb = df.groupby(group)
-        return [data(filename, gb.get_group(x)) for filename, x in \
-                                            zip(gb.groups.keys(), gb.groups)]
+train_X=np.array(train_X)
+train_y=np.array(train_y)
+
+test_X=np.array(test_X)
+test_y=np.array(test_y)
+print("HOI 3333")
+tf.keras.backend.clear_session()
+np.random.seed(42)
+tf.random.set_seed(42)
+
+epochs=3
+batch_size=2
+print("HOI HOI2222")
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Conv2D(64, (3,3), activation='relu', input_shape=(train_X.shape[1], train_X.shape[2], train_X.shape[3])),
+    tf.keras.layers.MaxPooling2D(2, 2),
+    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(512, activation='relu'),
+    tf.keras.layers.Dense(52, activation='softmax')
+])
+
+model.summary()
+print("HOI HOI224444")
+# cp = tf.keras.callbacks.ModelCheckpoint(filepath="250epochs_conv.h5",
+#             monitor='val_accuracy',
+#                                save_best_only=True,
+#                                verbose=0)
+# print("HOI 5555555")
+model.compile(loss = 'sparse_categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+# print("HOI 66666")
+
+history = model.fit(train_X, train_y, epochs=epochs, batch_size=batch_size, 
+                    validation_split=0.15, validation_data=(test_X, test_y), callbacks=[cp]).history
+print("HOI 77777")
+print (history.keys())
+acc = history['accuracy']
+val_acc = history['val_accuracy']
+loss = history['loss']
+val_loss = history['val_loss']
+epochs = range(len(acc))
+
+plt.figure(figsize = (12,8))
+plt.plot(epochs, loss, 'r', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Validation loss')
+plt.title('Training and validation loss')
+plt.legend(loc=0)
+plt.figure()
+plt.show()
+
+plt.figure(figsize = (12,8))
+plt.plot(epochs, acc, 'r', label='Training accuracy')
+plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
+plt.title('Training and validation accuracy')
+plt.legend(loc=0)
+plt.figure()
+plt.show()
+print("HOI HOI")
+# predict_x=model.predict(X_test) 
+# classes_x=np.argmax(predict_x,axis=1)
+
+classes = ['???'] * model.model_spec.config.num_classes
+label_map = model.model_spec.config.label_map
+for label_id, label_name in label_map.as_dict().items():
+  classes[label_id-1] = label_name
+
+# Define a list of colors for visualization
+COLORS = np.random.randint(0, 255, size=(len(classes), 3), dtype=np.uint8)
+
+def preprocess_image(image_path, input_size):
+  """Preprocess the input image to feed to the TFLite model"""
+  img = tf.io.read_file(image_path)
+  img = tf.io.decode_image(img, channels=3)
+  img = tf.image.convert_image_dtype(img, tf.uint8)
+  original_image = img
+  resized_img = tf.image.resize(img, input_size)
+  resized_img = resized_img[tf.newaxis, :]
+  resized_img = tf.cast(resized_img, dtype=tf.uint8)
+  return resized_img, original_image
 
 
-    def create_tf(self, group, path):
-        with tf.io.gfile.GFile(os.path.join(path, '{}'\
-                                        .format(group.filename)), 'rb') as fid:
-            encoded_jpg = fid.read()
-        encoded_jpg_io = io.BytesIO(encoded_jpg)
-        image = Image.open(encoded_jpg_io)
-        width, height = image.size
+def detect_objects(interpreter, image, threshold):
+  """Returns a list of detection results, each a dictionary of object info."""
 
-        filename = group.filename.encode('utf8')
-        image_format = b'jpg'
-        xmins = []
-        xmaxs = []
-        ymins = []
-        ymaxs = []
-        classes_text = []
-        classes = []
+  signature_fn = interpreter.get_signature_runner()
 
-        for index, row in group.object.iterrows():
-            xmins.append(row['xmin'] / width)
-            xmaxs.append(row['xmax'] / width)
-            ymins.append(row['ymin'] / height)
-            ymaxs.append(row['ymax'] / height)
-            classes_text.append(row['class'].encode('utf8'))
-            classes.append(self.class_text_to_int(row['class']))
+  # Feed the input image to the model
+  output = signature_fn(images=image)
 
-        tf_sample = tf.train.Example(features=tf.train.Features(feature={
-            'image/height': dataset_util.int64_feature(height),
-            'image/width': dataset_util.int64_feature(width),
-            'image/filename': dataset_util.bytes_feature(filename),
-            'image/source_id': dataset_util.bytes_feature(filename),
-            'image/encoded': dataset_util.bytes_feature(encoded_jpg),
-            'image/format': dataset_util.bytes_feature(image_format),
-            'image/object/bbox/xmin': dataset_util.float_list_feature(xmins),
-            'image/object/bbox/xmax': dataset_util.float_list_feature(xmaxs),
-            'image/object/bbox/ymin': dataset_util.float_list_feature(ymins),
-            'image/object/bbox/ymax': dataset_util.float_list_feature(ymaxs),
-            'image/object/class/text':\
-                                dataset_util.bytes_list_feature(classes_text),
-            'image/object/class/label':\
-                                    dataset_util.int64_list_feature(classes),
-        }))
-        return tf_sample
+  # Get all outputs from the model
+  count = int(np.squeeze(output['output_0']))
+  scores = np.squeeze(output['output_1'])
+  classes = np.squeeze(output['output_2'])
+  boxes = np.squeeze(output['output_3'])
 
-    def generate(self, output_path, image_dir, csv_input) -> None:
-        writer = tf.io.TFRecordWriter(output_path)
-        path = os.path.join(image_dir)
-        data = pd.read_csv(csv_input)
-        grouped = self.split(data, 'filename')
+  results = []
+  for i in range(count):
+    if scores[i] >= threshold:
+      result = {
+        'bounding_box': boxes[i],
+        'class_id': classes[i],
+        'score': scores[i]
+      }
+      results.append(result)
+  return results
 
-        for group in grouped:
-            try:
-              tf_sample = self.create_tf(group, path)
-              writer.write(tf_sample.SerializeToString())
-            except:
-              continue
-        logging.info('Successfully created the TFRecords: {}'.format(output_path))
+def run_odt_and_draw_results(image_path, interpreter, threshold=0.5):
+  """Run object detection on the input image and draw the detection results"""
+  # Load the input shape required by the model
+  _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
+
+  # Load the input image and preprocess it
+  preprocessed_image, original_image = preprocess_image(
+      image_path,
+      (input_height, input_width)
+    )
+
+  # Run object detection on the input image
+  results = detect_objects(interpreter, preprocessed_image, threshold=threshold)
+
+  # Plot the detection results on the input image
+  original_image_np = original_image.numpy().astype(np.uint8)
+  for obj in results:
+    # Convert the object bounding box from relative coordinates to absolute
+    # coordinates based on the original image resolution
+    ymin, xmin, ymax, xmax = obj['bounding_box']
+    xmin = int(xmin * original_image_np.shape[1])
+    xmax = int(xmax * original_image_np.shape[1])
+    ymin = int(ymin * original_image_np.shape[0])
+    ymax = int(ymax * original_image_np.shape[0])
+
+    # Find the class index of the current object
+    class_id = int(obj['class_id'])
+
+    # Draw the bounding box and label on the image
+    color = [int(c) for c in COLORS[class_id]]
+    cv2.rectangle(original_image_np, (xmin, ymin), (xmax, ymax), color, 2)
+    # Make adjustments to make the label visible for all objects
+    y = ymin - 15 if ymin - 15 > 15 else ymin + 15
+    label = "{}: {:.0f}%".format(classes[class_id], obj['score'] * 100)
+    cv2.putText(original_image_np, label, (xmin, y),
+        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+  # Return the final image
+  original_uint8 = original_image_np.astype(np.uint8)
+  return original_uint8
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate tf record")
-    parser.add_argument('-l', '--labelmap',
-                        help = 'Labelmap path',
-                        default = 'labelmap.txt',
-                        dest = 'labelmap_file'
-                        )
-    parser.add_argument('-o', '--output',
-                    help = 'Output path',
-                    default = 'train.record',
-                    dest = 'output_path'
-                    )
+INPUT_IMAGE_URL = os.listdir('data/table/full.png')
+model_path = os.listdir('export/models/model.npy')
+DETECTION_THRESHOLD = 0.5 
 
-    parser.add_argument('-i', '--imagesdir',
-                    help = 'Images directory',
-                    default = 'dataset/images',
-                    dest = 'image_dir'
-                    )
+# Load the TFLite model
+interpreter = tf.lite.Interpreter(model_path=model_path)
+interpreter.allocate_tensors()
 
-    parser.add_argument('-csv', '--csvinput',
-                    help = 'CSV with images names',
-                    default = 'dataset/labels.csv',
-                    dest = 'csv_input'
-                    )
-    args = parser.parse_args()
+# Run inference and draw detection result on the local copy of the original file
+detection_result_image = run_odt_and_draw_results(
+    INPUT_IMAGE_URL, 
+    interpreter, 
+    threshold=DETECTION_THRESHOLD
+)
 
-    tf_record = TFRecord(args.labelmap_file)
-    tf_record.generate(args.output_path, args.image_dir, args.csv_input)
+# Show the detection result
+Image.fromarray(detection_result_image)

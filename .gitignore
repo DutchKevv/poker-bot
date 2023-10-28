@@ -1,5 +1,6 @@
 server/data
 server/public
+training/Lib
 
 # Logs
 logs
