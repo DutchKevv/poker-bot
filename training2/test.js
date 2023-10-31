@@ -48,10 +48,10 @@ function loadAndPreprocessData(dataset) {
   const labels = [];
 
   for (const sample of dataset) {
-    const imgData = fs.readFileSync(sample.image);
-    const img = tf.node.decodeImage(imgData);
-    const img2 = tf.image.resizeBilinear(img, [224,224], true)
-    data.push(img2);
+    let img = fs.readFileSync(sample.image);
+    img = tf.node.decodeImage(imgData);
+    img = tf.image.resizeBilinear(img, [224,224], true)
+    data.push(img);
 
     for (const obj of sample.objects) {
       labels.push(obj.label);
