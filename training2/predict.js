@@ -2,18 +2,18 @@ const { join } = require('path')
 const { node, image, tensor1d, stack, dispose, loadLayersModel } = require('@tensorflow/tfjs-node')
 const fs = require('fs')
 const modelPath = 'file://' + join(__dirname, './dennis-model/model.json')
-const imagePath = join(__dirname, './project/data/table.png')
+const imagePath = join(__dirname, './project/data/table.jpg')
 
 const tf = require('@tensorflow/tfjs-node') // Use '@tensorflow/tfjs' for the browser
 
 async function predictObjectDetection(model, imagePath) {
   // Load the image
   const imgData = fs.readFileSync(imagePath)
-  const img = tf.node.decodeImage(imgData)
+  const img = tf.node.decodeImage(imgData).expandDims(0)
 
   //   const img = readFileSync(screenshotPath)
   // turn .png data to usable tfjs tensor
-  //   const tfimage = node.decodeImage(img, 3).expandDims()
+  //   const tfimage = node.decodeImage(img, 3)
   // var img = tf.browser.fromPixels(video.elt);
 
   var smallimg = image.resizeBilinear(img, [224, 224], true)
@@ -22,7 +22,7 @@ async function predictObjectDetection(model, imagePath) {
   //   const preprocessedImg = img.resizeBilinear([224, 224]).div(255)
 
   // Make a prediction using the model
-  const predictions = model.predict(smallimg.expandDims(0))
+  const predictions = model.predict(smallimg)
 
   // Process the predictions
   const labels = ['cat', 'dog'] // Define your class labels
