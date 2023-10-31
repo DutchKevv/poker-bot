@@ -92,8 +92,9 @@ async function trainCustomModel() {
 }
 
 trainCustomModel()
-  .then((model) => {
+  .then(async (model) => {
     console.log('Training completed.')
+    await model.save('file://dennis-model')
     // You can use the trained model for inference or save it for later use
   })
   .catch((error) => {
