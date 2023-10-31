@@ -8,11 +8,11 @@ const bal = join(__dirname, 'project/data/cards/all/7-clubs.png')
 // Step 1: Load and Preprocess Data (Simplified)
 const dataset = [
   { image: bal, objects: [{ label: '7-clubs', boundingBox: { x: 0, y: 0, width: 120, height: 176 } }] },
-  // { image: bal, objects: [{ label: 'dog', boundingBox: { x: 0, y: 0, width: 120, height: 176 } }] },
+  { image: bal, objects: [{ label: '7-diamonds', boundingBox: { x: 0, y: 0, width: 120, height: 176 } }] },
   // Add more images and objects
 ]
 
-const numClasses = 1 // Number of classes in your dataset
+const numClasses = 2 // Number of classes in your dataset
 const learningRate = 0.001
 const batchSize = 16
 const numEpochs = 50
@@ -49,8 +49,8 @@ function loadAndPreprocessData(dataset) {
 
   for (const sample of dataset) {
     let img = fs.readFileSync(sample.image)
-    img = tf.node.decodeImage(imgData)
-    img = tf.image.resizeBilinear(img, [176, 120], true)
+    img = tf.node.decodeImage(img)
+    img = tf.image.resizeBilinear(img, [224, 224], true)
     data.push(img)
 
     for (const obj of sample.objects) {
