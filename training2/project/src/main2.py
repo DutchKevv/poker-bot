@@ -10,12 +10,15 @@ import cv2
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
+from absl import logging
 
 print("version",tf.version)
 assert tf.__version__.startswith('2')
 
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+
 tf.get_logger().setLevel('ERROR')
-from absl import logging
+
 logging.set_verbosity(logging.ERROR)
 
 # physical_devices = tf.config.list_physical_devices("GPU")

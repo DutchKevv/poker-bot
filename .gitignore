@@ -1,8 +1,8 @@
 server/data
 server/public
 training/Lib
-export/web_modules
-# training2/results
+training2/project/results
+**/export/models
 
 # Logs
 logs

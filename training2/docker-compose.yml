@@ -2,6 +2,8 @@ version : "3.7"
 
 services:
   app:
+    security_opt:
+      - seccomp:unconfined
     build: 
       context: .
       dockerfile: Dockerfile
@@ -9,8 +11,9 @@ services:
     container_name: poker-app
     restart: always
     tty: true
+    group_add:
+      - video
     expose:
-      - 660
       - 80:8080
       - 8888:8888
     volumes:
